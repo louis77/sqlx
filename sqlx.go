@@ -1052,3 +1052,14 @@ func missingFields(transversals [][]int) (field int, err error) {
 	}
 	return 0, nil
 }
+
+// NextResultSet behaves like sql.NextResultSet, but cleans cache of previous result set.
+func (r *Rows) NextResultSet() bool {
+	if !r.Rows.NextResultSet() {
+		return false
+	}
+	r.started = false
+	r.fields = nil
+	r.values = nil
+	return true
+}
